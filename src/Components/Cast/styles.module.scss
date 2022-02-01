@@ -1,0 +1,40 @@
+.wrapperCast{
+  overflow-x: scroll;
+  padding-left: 4px;
+}
+
+.listCast{
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  li{
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px 0px rgba(0,0,0,25%);
+    flex-shrink: 0;
+
+    max-width: 191px;
+
+    img{
+      border-radius: 4px;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      max-height: 222px;
+    }
+
+    h5{
+      font-size: 1.125rem;
+      color: var(--text-neutral-gray-900);
+      line-height: 1.875rem;
+      margin-top: 16px;
+    }
+
+    span{
+      color: var(--text-neutral-gray-900);
+      line-height: 1.5rem;
+    }
+  }
+}
+
