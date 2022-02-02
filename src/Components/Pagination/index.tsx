@@ -8,37 +8,38 @@ interface PaginationProps {
   setPagination: Dispatch<SetStateAction<number>>;
 }
 
+const max_pages = 5;
+const max_left = (max_pages - 1) / 2;
+
 export const Pagination = ({ totalPages, currentPage, setPagination }: PaginationProps) => {
-  const pages = [];
-  const max_pages = 5;
+  const first = Math.max(currentPage + Math.min(totalPages - currentPage, max_left), 1) === totalPages
+    ? totalPages - (max_pages - 1)
+    : Math.max(currentPage - max_left, 1)
 
-  function handleChangePage(page: number) {
-    setPagination(page)
-  }
-
-  for (let i = currentPage; i < currentPage + max_pages && i < totalPages; i++) {
-    if (currentPage > Math.floor(max_pages / 2)) {
-      pages.push(
-        <li key={i - Math.floor(max_pages / 2)}
-          onClick={() => handleChangePage(i - Math.floor(max_pages / 2))}
-          className={i - Math.floor(max_pages / 2) == currentPage ? `${styles.active} ${styles.number}` : `${styles.number}`}
-        >{i - Math.floor(max_pages / 2)}</li>)
-    } else {
-      pages.push(
-        <li key={i}
-          onClick={() => handleChangePage(i)}
-          className={i == currentPage ? `${styles.active} ${styles.number}` : `${styles.number}`}
-        >{i}</li>)
-    }
-  }
-
+  console.log(currentPage)
   return (
     <ul className={styles.pagination}>
-      {currentPage > 2 && <li onClick={() => setPagination(1)}>Primeira</li>}
-      {currentPage > 1 && <li><img src={arrowImg} alt="Anterior" /></li>}
-      {pages.map(page => page)}
-      {currentPage < totalPages && <li><img src={arrowImg} alt="Próximo" /></li>}
-      {currentPage < totalPages && <li onClick={() => setPagination(totalPages)}>Última</li>}
-    </ul>
+      <li
+        onClick={() => setPagination(1)}
+        className={currentPage === 1 ? styles.disabled : ''}>
+        Primeira
+      </li>
+      <li
+        className={currentPage === 1 ? styles.disabled : ''}
+        onClick={() => setPagination(currentPage === 1 ? 1 : currentPage = currentPage - 1)} >
+        <img src={arrowImg} alt="Anterior" />
+      </li>
+
+      {Array.from({ length: Math.min(max_pages, totalPages) })
+        .map((_, index) => index + first)
+        .map((page) => (
+          <li key={page} className={page === currentPage ? styles.active : ''} onClick={() => setPagination(page)}>{page}</li>
+        ))}
+
+      <li onClick={() => setPagination(currentPage === totalPages ? totalPages : currentPage = currentPage + 1)} className={currentPage < totalPages ? '' : styles.disabled}>
+        <img src={arrowImg} alt="Próximo" />
+      </li>
+      <li onClick={() => setPagination(totalPages)} className={currentPage < totalPages ? ' ' : styles.disabled}>Última</li>
+    </ul >
   );
 };

@@ -15,29 +15,23 @@ export const ListMoviesHome = () => {
   const [movies, setMovie] = useState<Movie[]>([])
   const [pagination, setPagination] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
+  const [loadingMovies, setLoadingMovies] = useState(false)
 
   useEffect(() => {
     async function callMovies() {
+      setLoadingMovies(true)
       const response = await api.get(`movie/popular?language=pt-BR&page=${pagination}`)
       setMovie(response.data.results)
       setTotalPages(response.data.total_pages)
+      setLoadingMovies(false)
     }
     callMovies()
-  }, [])
-
-
-  function handleNextPage() {
-    setPagination((number) => number + 1)
-  }
-
-  function handlePrevPage() {
-    setPagination((number) => number != 0 ? number - 1 : number)
-  }
+  }, [pagination])
 
   return (
     <section className={styles.ListMoviesSection}>
       <div className="container">
-        <MoviesList movies={movies} />
+        <MoviesList loading={loadingMovies} movies={movies} />
         <Pagination totalPages={totalPages} currentPage={pagination} setPagination={setPagination} />
       </div>
     </section>
