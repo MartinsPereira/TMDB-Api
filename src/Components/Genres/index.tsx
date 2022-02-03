@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useMovies } from '../../Hooks/useMovies';
 import { api } from '../../Services/api';
 import styles from './styles.module.scss'
 
@@ -9,6 +10,7 @@ interface Genre {
 
 export const Genres = () => {
   const [genres, setGenres] = useState<Genre[]>([])
+  const { selectedGenres, setSelectedGenres } = useMovies()
 
   useEffect(() => {
     async function callGenres() {
@@ -18,12 +20,26 @@ export const Genres = () => {
     callGenres()
   }, [])
 
+  function handleClickGenre(genre: Genre) {
+    if (selectedGenres.find(gen => gen.id === genre.id)) {
+      const newSelectedGenres = selectedGenres.filter(item => item.id !== genre.id)
+      setSelectedGenres([...newSelectedGenres])
+    } else {
+      setSelectedGenres([...selectedGenres, genre])
+    }
+  }
+
   return (
     <>
       <span className={styles.filterSpan}>Filtre por:</span>
       <ul className={styles.listGenres}>
         {genres.map(genre => (
-          <li key={genre.id}><a href="#">{genre.name}</a></li>
+          <li
+            key={genre.id}
+            className={selectedGenres.find(gen => gen.id === genre.id) && styles.active}
+            onClick={() => handleClickGenre(genre)}>
+            {genre.name}
+          </li>
         ))}
       </ul>
     </>

@@ -42,9 +42,13 @@
     max-width: calc((100% / 6) - 27px);
     width: 100%;
 
+    a{
+      display: block;
+    }
+
     img{
       border: 1px solid var(--text-neutral-gray-200);
-      border-radius: 2px;
+      border-radius: 4px;
       width: 100%;
       height: 264px;
       object-fit: cover;
@@ -55,12 +59,15 @@
       font-size: 1rem;
       font-weight: 700;
       margin-top: 8px;
+      line-height: 1.5rem;
     }
 
     span{
       color: var(--text-gray);
       font-size: 0.875rem;
       font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.5rem;
     }
   }
 }

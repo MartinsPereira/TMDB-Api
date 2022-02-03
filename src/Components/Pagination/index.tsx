@@ -8,15 +8,20 @@ interface PaginationProps {
   setPagination: Dispatch<SetStateAction<number>>;
 }
 
-const max_pages = 5;
-const max_left = (max_pages - 1) / 2;
 
 export const Pagination = ({ totalPages, currentPage, setPagination }: PaginationProps) => {
-  const first = Math.max(currentPage + Math.min(totalPages - currentPage, max_left), 1) === totalPages
-    ? totalPages - (max_pages - 1)
-    : Math.max(currentPage - max_left, 1)
+  const max_pages = 5; // Apenas números impares
+  const max_left = totalPages <= max_pages ? 0 : ((max_pages - 1) / 2);
 
-  console.log(currentPage)
+  let first = 1;
+  if (max_left > 0) {
+    Math.max(currentPage + Math.min(totalPages - currentPage, max_left), 0) === totalPages
+      ? first = totalPages - (max_pages - 1)
+      : first = Math.max(currentPage - max_left, 1)
+  } else {
+    first = 1;
+  }
+
   return (
     <ul className={styles.pagination}>
       <li
