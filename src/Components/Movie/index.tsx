@@ -4,10 +4,9 @@ import { MoviesList } from '../MoviesList';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { api } from '../../Services/api';
-import { utimesSync } from 'fs';
 import { ChartMovie } from '../ChartMovie';
 
-interface Movie {
+interface MovieType {
   id: number;
   title: string;
   release_date: string;
@@ -65,23 +64,28 @@ interface RecommendationsMovie {
 export const Movie = () => {
   const params = useParams();
 
-  const [movie, setMovie] = useState<Movie>();
+  const [movie, setMovie] = useState<MovieType>();
   const [credits, setCredits] = useState<Credits>();
   const [crew, setCrew] = useState<Crew[]>();
   const [trailers, setTrailers] = useState<Trailer[]>();
   const [recommendations, setRecommendations] = useState<RecommendationsMovie[]>();
   const [loadingMovies, setLoadingMovies] = useState(false)
+  const [loadingMovie, setLoadingMovie] = useState(false)
+  const [loadingCrew, setLoadingCrew] = useState(false)
 
 
   useEffect(() => {
     async function callMovieDetails() {
+      setLoadingMovie(true)
       const response = await api.get(`movie/${params.id}?language=pt-BR&append_to_response=releases`);
-      console.log(response)
       setMovie(response.data);
+      setLoadingMovie(false)
     }
     async function callCreditsDetails() {
+      setLoadingCrew(true)
       const response = await api.get(`movie/${params.id}/credits?language=pt-BR`);
       setCredits(response.data);
+      setLoadingCrew(false)
     }
     callMovieDetails()
     callCreditsDetails()
@@ -121,6 +125,7 @@ export const Movie = () => {
             filteredCrew.push({ ...attribute })
             break;
         }
+        return null;
       })
 
       filteredCrew.reduce((acc: Crew, item: Crew, index) => {
@@ -172,8 +177,6 @@ export const Movie = () => {
     return `${textoHoras}h ${textoMinutos}m`;
   };
 
-  console.log('Recarregou')
-  console.log(trailers)
 
   if (movie && credits && trailers)
     return (
@@ -181,26 +184,34 @@ export const Movie = () => {
         <main className={styles.sectionMovie}>
           <div className="container">
             <div className={styles.individualDetails}>
-              <img src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`} className={styles.skeleton} alt={movie.title} />
+
+              <img className={loadingMovie ? 'teste' : 'testesss'} src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`} alt={movie.title} />
+
+
+
               <div className={styles.infoMovieRight}>
 
-                <h2 className={styles.title}>{movie.title}</h2>
+                <h2 className={loadingMovie ? `${styles.title}  skeleton_text` : `${styles.title}`}>{movie.title}</h2>
 
                 <ul className={styles.listDetails}>
-                  <li>{movie.releases.countries.find(countrie => countrie.iso_3166_1 === "BR")?.certification} anos</li>
-                  <li>{movie.release_date ? new Intl.DateTimeFormat('pt-br', { dateStyle: 'short' }).format(new Date(movie.release_date)) : 'Ainda sem data definida'} (BR)</li>
-                  <li>{movie.genres.map((genre: Genre, index) => movie.genres.length === (index + 1) ? `${genre.name}` : `${genre.name}, `)}</li>
-                  <li>{converter(movie.runtime)}</li>
+                  <li className={loadingMovie ? `  skeleton_text` : ``}>{`${movie.releases.countries.find(countrie => countrie.iso_3166_1 === "BR")?.certification !== "L" ? movie.releases.countries.find(countrie => countrie.iso_3166_1 === "BR")?.certification + ' anos' : 'Livre'}`} </li>
+
+                  <li className={loadingMovie ? `  skeleton_text` : ``}>{movie.release_date ? new Intl.DateTimeFormat('pt-br', { dateStyle: 'short' }).format(new Date(movie.release_date)) : 'Ainda sem data definida'} (BR)</li>
+
+                  <li className={loadingMovie ? `  skeleton_text` : ``}>{movie.genres.map((genre: Genre, index) => movie.genres.length === (index + 1) ? `${genre.name}` : `${genre.name}, `)}</li>
+
+                  <li className={loadingMovie ? `  skeleton_text` : ``}>{converter(movie.runtime)}</li>
                 </ul>
 
                 <div className={styles.avaliacao}>
-                  <div> <ChartMovie vote={movie.vote_average} /></div>
+                  <div><ChartMovie vote={movie.vote_average} /></div>
                   <span>Avaliação dos <br /> usuários</span>
                 </div>
 
                 <h3>Sinopse</h3>
-                <p className={styles.pSinopse}>{movie.overview}</p>
-                <ul className={styles.cast}>
+                <p className={loadingMovie ? `  skeleton_text` : ` ${styles.pSinopse}`}>{movie.overview}</p>
+
+                <ul className={loadingCrew ? `${styles.cast} skeleton_text` : `${styles.cast}`} >
                   {crew?.map(liCrew => (
                     <li key={liCrew.id}>
                       <span>{liCrew.name}</span>
@@ -208,22 +219,26 @@ export const Movie = () => {
                     </li>
                   ))}
                 </ul>
+
               </div>
             </div>
           </div>
         </main>
+
         <section className={styles.sectionCast}>
           <div className='container'>
             <h2 className={styles.titleBlack}>Elenco original</h2>
             <Cast castItems={credits.cast} idPage={params.id} />
           </div>
         </section>
+
         <section className={styles.sectionTrailer}>
           <div className='container'>
             <h2 className={styles.titleBlack}>Trailer</h2>
-            <iframe frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen src={`https://www.youtube.com/embed/${trailers.find((trailer: Trailer) => trailer.official === true && trailer.type === 'Trailer' || trailer.type === 'Teaser')?.key}`} ></iframe>
+            <iframe frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title={movie.title} allowFullScreen src={`https://www.youtube.com/embed/${trailers.find((trailer: Trailer) => trailer.official === true ? trailer.type === 'Trailer' || trailer.type === 'Teaser' : '')?.key}`} ></iframe>
           </div>
         </section>
+
         <section >
           <div className='container'>
             <h2 className={styles.titleBlack}>Recomendações</h2>

@@ -4,6 +4,11 @@
   justify-content: center;
   gap: 8px;
   margin-top: 46px;
+  overflow-x: scroll;
+
+  @media (max-width: 575px){
+    justify-content: flex-start;
+  }
 
   li{
     line-height: 24px;
@@ -17,6 +22,7 @@
     -moz-user-select: none;     
     -ms-user-select: none;      
     user-select: none;  
+    flex-shrink: 0;
 
     &.disabled{
       opacity: 0.45;
@@ -26,6 +32,7 @@
       background-color: var(--primary-blue);
       color: var(--text-white);
     }
+
 
     img[alt="Anterior"]{
       transform: rotate(180deg);

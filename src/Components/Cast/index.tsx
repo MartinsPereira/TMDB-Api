@@ -1,7 +1,6 @@
 import styles from './styles.module.scss'
 import imgDefault from '../../Assets/img/image-default.jpg'
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 interface CastInterface {
   id: number;

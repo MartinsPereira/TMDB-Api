@@ -22,6 +22,8 @@ export const Pagination = ({ totalPages, currentPage, setPagination }: Paginatio
     first = 1;
   }
 
+
+
   return (
     <ul className={styles.pagination}>
       <li

@@ -34,6 +34,7 @@ export const ListMoviesHome = () => {
     setPagination(1)
   }, [selectedGenres])
 
+
   return (
     <section className={styles.ListMoviesSection}>
       <div className="container">

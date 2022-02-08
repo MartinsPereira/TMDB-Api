@@ -1,5 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
-import { api } from '../Services/api';
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 
 interface Genre {
   id: number;

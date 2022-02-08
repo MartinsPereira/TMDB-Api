@@ -10,20 +10,19 @@ export const Loading = ({ numItem }: PropsLoading) => {
 
   useEffect(() => {
     setQtdItem(numItem)
-  })
+  }, [numItem])
 
   return (
     <section className={styles.loadingMoviesHome}>
       <div className={styles.divMoviesList}>
         <ul className={styles.listMovies}>
-          {Array.from({ length: qtdItem }).map(indi => (
-            <li>
+          {Array.from({ length: qtdItem }).map((indi, index) => (
+            <li key={index}>
               <div className={styles.skeleton} ></div>
               <h5>Lorem ipsum dolor sit amet.</h5>
               <span>14 DE DEZ. DE 2021</span>
             </li>
           ))}
-
         </ul>
       </div>
     </section >

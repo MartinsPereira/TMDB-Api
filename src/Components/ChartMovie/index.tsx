@@ -1,7 +1,6 @@
 
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import styles from './styles.module.scss'
 
 interface ChartMovieProps {
   vote: number,

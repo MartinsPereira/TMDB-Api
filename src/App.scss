@@ -62,9 +62,16 @@ ul{
 .container{
   max-width: 1216px;
   margin: 0 auto;
+  padding: 0 8px;
 }
 
 .skeleton{
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+.skeleton_text{
+  color: transparent;
+  border-radius: 6px;
   animation: skeleton-loading 1s linear infinite alternate;
 }
 

@@ -16,6 +16,7 @@ export const Genres = () => {
     async function callGenres() {
       const response = await api.get('genre/movie/list?language=pt-BR')
       setGenres(response.data.genres)
+
     }
     callGenres()
   }, [])

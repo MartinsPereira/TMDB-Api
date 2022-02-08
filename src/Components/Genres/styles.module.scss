@@ -16,6 +16,10 @@
   gap: 12px;
   margin-top: 16px;
 
+  @media (max-width: 575px){
+    justify-content: flex-start;
+  }
+
   li{
     display: flex;
     align-items: center;

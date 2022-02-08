@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
 import { Genres } from '../Genres';
 import { ListMoviesHome } from '../ListMoviesHome';
 import styles from './styles.module.scss'
 
 
 export const Introduction = () => {
+
   return (
     <>
       <main className={styles.introducao}>
