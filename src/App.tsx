@@ -8,14 +8,14 @@ import { Movie } from './Components/Movie';
 export function App() {
 
   return (
-    <MoviesProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <MoviesProvider>
         <Header />
         <Routes>
           <Route path="/" element={<Introduction />}></Route>
-          <Route path="movie/:id" element={<Movie />}></Route>
+          <Route path="/movie/:id" element={<Movie />}></Route>
         </Routes>
-      </BrowserRouter>
-    </MoviesProvider>
+      </MoviesProvider>
+    </BrowserRouter>
   );
 }
