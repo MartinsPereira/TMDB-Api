@@ -4,7 +4,7 @@
   justify-content: center;
   gap: 8px;
   margin-top: 46px;
-  overflow-x: scroll;
+  overflow-x: auto;
 
   @media (max-width: 575px){
     justify-content: flex-start;

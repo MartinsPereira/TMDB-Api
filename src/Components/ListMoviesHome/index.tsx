@@ -14,10 +14,25 @@ interface Movie {
 
 export const ListMoviesHome = () => {
   const [movies, setMovie] = useState<Movie[]>([])
+  const [totalPages, setTotalPages] = useState(500)
   const [pagination, setPagination] = useState(1)
-  const [totalPages, setTotalPages] = useState(0)
   const [loadingMovies, setLoadingMovies] = useState(false)
   const { selectedGenres } = useMovies()
+
+  useEffect(() => {
+    const genresLocal = localStorage.getItem('currentPageHome')
+    if (genresLocal) {
+      if (totalPages < JSON.parse(genresLocal)) {
+        setPagination(1)
+      } else {
+        setPagination(JSON.parse(genresLocal))
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('currentPageHome', JSON.stringify(pagination))
+  }, [pagination])
 
   useEffect(() => {
     async function callMovies() {
@@ -31,8 +46,11 @@ export const ListMoviesHome = () => {
   }, [pagination, selectedGenres])
 
   useEffect(() => {
-    setPagination(1)
-  }, [selectedGenres])
+    if (totalPages < pagination) {
+      setPagination(1)
+    }
+  }, [selectedGenres, totalPages])
+
 
 
   return (

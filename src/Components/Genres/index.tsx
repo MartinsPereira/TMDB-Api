@@ -16,10 +16,20 @@ export const Genres = () => {
     async function callGenres() {
       const response = await api.get('genre/movie/list?language=pt-BR')
       setGenres(response.data.genres)
-
     }
     callGenres()
   }, [])
+
+  useEffect(() => {
+    const genresLocal = localStorage.getItem('SelectedGenresHome')
+    if (genresLocal) {
+      setSelectedGenres(JSON.parse(genresLocal))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('SelectedGenresHome', JSON.stringify(selectedGenres))
+  }, [selectedGenres])
 
   function handleClickGenre(genre: Genre) {
     if (selectedGenres.find(gen => gen.id === genre.id)) {

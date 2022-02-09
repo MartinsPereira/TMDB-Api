@@ -2,6 +2,7 @@ import styles from './styles.module.scss'
 import imgDefault from '../../Assets/img/image-default.jpg'
 import { Link } from 'react-router-dom';
 import { Loading } from '../Loading';
+import { useMovies } from '../../Hooks/useMovies';
 interface Movie {
   id: number,
   title: string,
@@ -15,6 +16,7 @@ interface MoviesProps {
 }
 
 export const MoviesList = ({ movies, loading }: MoviesProps) => {
+  const { imgUrl } = useMovies()
 
   if (movies)
     return (
@@ -23,7 +25,7 @@ export const MoviesList = ({ movies, loading }: MoviesProps) => {
           {!loading ? movies.map((movie) => (
             <li key={movie.id}>
               <Link to={`/movie/${movie.id}`}>
-                <img src={movie.poster_path ? `https://www.themoviedb.org/t/p/w300_and_h450_bestv2${movie.poster_path}` : imgDefault} className={styles.skeleton} alt={movie.title} />
+                <img src={movie.poster_path ? `${imgUrl?.images.secure_base_url}${imgUrl?.images.poster_sizes[2]}${movie.poster_path}` : imgDefault} className='skeleton' alt={movie.title} />
                 <h5>{movie.title}</h5>
                 <span>{movie.release_date ? new Intl.DateTimeFormat('pt-br', { dateStyle: 'medium' }).format(new Date(movie.release_date)) : 'Ainda sem data definida'}</span>
               </Link>

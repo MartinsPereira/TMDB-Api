@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { api } from '../../Services/api';
 import { ChartMovie } from '../ChartMovie';
+import { useMovies } from '../../Hooks/useMovies';
+import imgDefault from '../../Assets/img/image-default.jpg'
 
 interface MovieType {
   id: number;
@@ -63,6 +65,7 @@ interface RecommendationsMovie {
 
 export const Movie = () => {
   const params = useParams();
+  const { imgUrl } = useMovies()
 
   const [movie, setMovie] = useState<MovieType>();
   const [credits, setCredits] = useState<Credits>();
@@ -73,22 +76,21 @@ export const Movie = () => {
   const [loadingMovie, setLoadingMovie] = useState(false)
   const [loadingCrew, setLoadingCrew] = useState(false)
 
-
   useEffect(() => {
     async function callMovieDetails() {
       setLoadingMovie(true)
       const response = await api.get(`movie/${params.id}?language=pt-BR&append_to_response=releases`);
       setMovie(response.data);
-      setLoadingMovie(false)
+      setLoadingMovie(false);
     }
     async function callCreditsDetails() {
-      setLoadingCrew(true)
+      setLoadingCrew(true);
       const response = await api.get(`movie/${params.id}/credits?language=pt-BR`);
       setCredits(response.data);
-      setLoadingCrew(false)
+      setLoadingCrew(false);
     }
-    callMovieDetails()
-    callCreditsDetails()
+    callMovieDetails();
+    callCreditsDetails();
   }, [params.id])
 
   useEffect(() => {
@@ -185,9 +187,7 @@ export const Movie = () => {
           <div className="container">
             <div className={styles.individualDetails}>
 
-              <img className={loadingMovie ? 'teste' : 'testesss'} src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`} alt={movie.title} />
-
-
+              <img src={movie.poster_path ? `${imgUrl?.images.secure_base_url}${imgUrl?.images.poster_sizes[4]}${movie.poster_path}` : imgDefault} alt={movie.title} />
 
               <div className={styles.infoMovieRight}>
 
